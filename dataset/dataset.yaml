@@ -1,0 +1,12 @@
+# Dataset configuration for YOLO
+
+# Train/val/test sets - Paths will change depending on the current fold
+train: /content/drive/MyDrive/Dataset_to_train_denoised/images/train
+val: /content/drive/MyDrive/Dataset_to_train_denoised/images/val
+test: /content/drive/MyDrive/Dataset_to_train_denoised/images/test
+
+# Number of classes
+nc: 1  # Only one class: Microalga
+
+# Class names
+names: ['Microalga']
