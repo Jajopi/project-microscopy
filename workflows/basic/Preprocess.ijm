@@ -1,5 +1,6 @@
 args = getArgument();
-input = args;
+parts = split(args, "|");
+input = parts[0]; output = parts[1];
 open(input);
 
 run("8-bit");
@@ -10,7 +11,7 @@ run("Enhance Contrast...", "saturated=0.35");
 setAutoThreshold("Otsu dark");
 run("Convert to Mask");
 
-saveAs("PNG", input + ".tmp");
-File.rename(input + ".png", input + ".tmp"); // Fix extension always replaced with .png
+saveAs("PNG", input + ".basic" + ".tmp");
+File.rename(input + ".basic" + ".png", output); // Fix extension always replaced with .png
 
 eval("script", "System.exit(0);");

@@ -3,28 +3,33 @@
 set -ueo pipefail
 
 MAX_JOBS="${MAX_JOBS:-4}"
+IDENTIFIER="${IDENTIFIER:-basic}"
+PLOTS_DIR="${PLOTS_DIR:-plots}"
+
+mkdir -p "$PLOTS_DIR"
 
 if [ -f stats.csv ]; then rm stats.csv; fi
-printf "file\tlabels\tidentified\tTP\tFP\tFN\taccuracy\n" > stats.csv
+printf "file\tclusters\tidentified\tTP\tFP\tFN\taccuracy\tsingle\tidentified\tTP\tFP\tFN\taccuracy\n" > stats.csv
 
 if [ -f log.txt ]; then rm log.txt; fi
 touch log.txt
 
 process_file() {
-    file="$1"
+    file="$(readlink -f "$1")"
     date | tee -a log.txt
-    if [ ! -f "$file".csv ]; then
+    if [ ! -f "$file.$IDENTIFIER.csv" ]; then
         echo "Preprocessing: $file" | tee -a log.txt
-        fiji --headless --console -macro ./Preprocess.ijm "$file" &>> log.txt
+        fiji --headless --console -macro ./Preprocess.ijm "$file|$file.$IDENTIFIER.tmp" &>> log.txt
 
-        echo "Analyzing: $file".tmp | tee -a log.txt
-        fiji --headless --console -macro ./Analyze.ijm "$file" &>> log.txt
+        echo "Analyzing: $file.$IDENTIFIER.tmp" | tee -a log.txt
+        fiji --headless --console -macro ./Analyze.ijm "$file.$IDENTIFIER.tmp|$file.$IDENTIFIER.csv" &>> log.txt
 
-        rm "$file".tmp
+        rm "$file.$IDENTIFIER.tmp"
     fi
     name=$(basename "$file" .png)
-    echo "Comparing: $file".csv with dataset/labels/train/"$name".txt | tee -a log.txt
-    python ../../compare_results.py "$file".csv dataset/labels/train/"$name".txt "$file" >> stats.csv
+    plot="$PLOTS_DIR/$name.$IDENTIFIER.png"
+    echo "Comparing: $file.$IDENTIFIER.csv" to ../../dataset/labels/train/"$name".txt | tee -a log.txt
+    python ../../compare_results.py "$file.$IDENTIFIER.csv" ../../dataset/labels/train/"$name".txt "$file" "$plot" >> stats.csv
 }
 
 for file in ../../dataset/images/train/*.png; do
