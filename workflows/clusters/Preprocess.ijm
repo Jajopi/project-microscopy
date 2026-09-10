@@ -11,11 +11,7 @@ run("Enhance Contrast...", "saturated=0.35");
 setAutoThreshold("Otsu dark");
 run("Convert to Mask");
 
-run("Invert");
-run("Watershed");
-run("Invert");
-
-saveAs("PNG", input + ".single" + ".tmp");
-File.rename(input + ".single" + ".png", output); // Fix extension always replaced with .png
+saveAs("PNG", input + ".clusters" + ".tmp");
+File.rename(input + ".clusters" + ".png", output); // Fix extension always replaced with .png
 
 eval("script", "System.exit(0);");

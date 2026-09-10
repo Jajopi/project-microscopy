@@ -3,13 +3,13 @@
 set -ueo pipefail
 
 MAX_JOBS="${MAX_JOBS:-4}"
-IDENTIFIER="${IDENTIFIER:-single}"
+IDENTIFIER="${IDENTIFIER:-clusters}"
 PLOTS_DIR="${PLOTS_DIR:-plots}"
 
 mkdir -p "$PLOTS_DIR"
 
 if [ -f stats.csv ]; then rm stats.csv; fi
-printf "file\tlabels\tidentified\tTP\tFP\tFN\taccuracy\n" > stats.csv
+printf "file\tclusters\tidentified\tTP\tFP\tFN\taccuracy\tsingle\tidentified\tTP\tFP\tFN\taccuracy\n" > stats.csv
 
 if [ -f log.txt ]; then rm log.txt; fi
 touch log.txt
@@ -34,7 +34,7 @@ process_file() {
     name=$(basename "$file" .png)
     plot="$PLOTS_DIR/$name.$IDENTIFIER.png"
     echo "Comparing: $file.$IDENTIFIER.csv" to ../../dataset/labels/"$name".txt | tee -a log.txt
-    python ../../compare_results.py "$file.$IDENTIFIER.csv" ../../dataset/labels/"$name".txt "$file" "$plot" >> stats.csv &
+    python ../../compare_results_clusters.py "$file.$IDENTIFIER.csv" ../../dataset/labels/"$name".txt "$file" "$plot" >> stats.csv &
     cpid=$!; wait "$cpid"; cpid=""
 }
 
