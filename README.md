@@ -46,8 +46,8 @@ The dataset turned out to be quite difficult to analyze, the images were often n
 
 In the repository [^3] associated with the original project the dataset was part of, the author claims to be able to identify almost all cells in the images with his AI-based workflow. We did not include this workflow in our comparison, but given the dataset quality, this seems to be an impressive result. If we decide to use this approach to estimate density of our cell culture, we will probably try to reuse his approach. 
 
-## References
+## References and links
 
-1. https://github.com/Jajopi/project-microscopy
-2. https://www.kaggle.com/datasets/cenciarinigabriel/microalgae-microscope-20x-fov18
-3. https://github.com/Cenciarini/Microalgae-Vision-Counter
+[^1]: https://github.com/Jajopi/project-microscopy
+[^2]: https://www.kaggle.com/datasets/cenciarinigabriel/microalgae-microscope-20x-fov18
+[^3]: https://github.com/Cenciarini/Microalgae-Vision-Counter
