@@ -88,8 +88,7 @@ def compare_results(results, labels):
     false_negatives = [label for i, label in enumerate(labels) if i not in used_labels]
 
     TP, FP, FN = len(used_labels), len(results) - len(used_labels), len(labels) - len(used_labels)
-    accuracy = TP / (TP + FP + FN) if TP + FP + FN > 0 else 0
-    stats = len(labels), len(results), TP, FP, FN, accuracy
+    stats = len(labels), len(results), TP, FP, FN
     return stats, correct, false_positives, false_negatives
 
 def plot_comparison(cluster_correct, cluster_fp, cluster_fn, single_correct, single_fp, single_fn, image_size, image_file, output_path):
@@ -123,13 +122,7 @@ def plot_comparison(cluster_correct, cluster_fp, cluster_fn, single_correct, sin
     fig.savefig(output_path, dpi=150)
     plt.close(fig)
 
-def print_stats(cluster_stats, single_stats):
-    for i in range(len(cluster_stats)):
-        if i == len(cluster_stats) - 1: print(f"{cluster_stats[i]:.2%}", end='\t')
-        else: print(cluster_stats[i], end='\t')
-    for i in range(len(single_stats)):
-        if i == len(single_stats) - 1: print(f"{single_stats[i]:.2%}")
-        else: print(single_stats[i], end='\t')
+def print_stats(cluster_stats, single_stats): print('\t'.join(map(str, cluster_stats)) + '\t' + '\t'.join(map(str, single_stats)))
 
 if __name__ == "__main__":
     result_file = argv[1]

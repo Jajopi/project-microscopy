@@ -47,8 +47,7 @@ def compare_results(results, labels):
     false_negatives = [label for i, label in enumerate(labels) if i not in used_labels]
 
     TP, FP, FN = len(used_labels), len(results) - len(used_labels), len(labels) - len(used_labels)
-    accuracy = TP / (TP + FP + FN) if TP + FP + FN > 0 else 0
-    stats = len(labels), len(results), TP, FP, FN, accuracy
+    stats = len(labels), len(results), TP, FP, FN
     return stats, correct, false_positives, false_negatives
 
 def plot_comparison(correct, false_positives, false_negatives, image_size, image_file, output_path):
@@ -79,10 +78,7 @@ def plot_comparison(correct, false_positives, false_negatives, image_size, image
     fig.savefig(output_path, dpi=150)
     plt.close(fig)
 
-def print_stats(stats):
-    for i in range(len(stats)):
-        if i == len(stats) - 1: print(f"{stats[i]:.2%}")
-        else: print(stats[i], end='\t')
+def print_stats(stats): print('\t'.join(map(str, stats)))
 
 if __name__ == "__main__":
     result_file = argv[1]

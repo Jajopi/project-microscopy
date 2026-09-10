@@ -9,7 +9,7 @@ PLOTS_DIR="${PLOTS_DIR:-plots}"
 mkdir -p "$PLOTS_DIR"
 
 if [ -f stats.csv ]; then rm stats.csv; fi
-printf "file\tlabels\tidentified\tTP\tFP\tFN\taccuracy\n" > stats.csv
+printf "file\tlabels\tidentified\tTP\tFP\tFN\n" > stats.csv
 
 if [ -f log.txt ]; then rm log.txt; fi
 touch log.txt
