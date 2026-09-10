@@ -33,14 +33,14 @@ process_file() {
     fi
     name=$(basename "$file" .png)
     plot="$PLOTS_DIR/$name.$IDENTIFIER.png"
-    echo "Comparing: $file.$IDENTIFIER.csv" to ../../dataset/labels/train/"$name".txt | tee -a log.txt
-    python ../../compare_results_single.py "$file.$IDENTIFIER.csv" ../../dataset/labels/train/"$name".txt "$file" "$plot" >> stats.csv &
+    echo "Comparing: $file.$IDENTIFIER.csv" to ../../dataset/labels/"$name".txt | tee -a log.txt
+    python ../../compare_results.py "$file.$IDENTIFIER.csv" ../../dataset/labels/"$name".txt "$file" "$plot" >> stats.csv &
     cpid=$!; wait "$cpid"; cpid=""
 }
 
 trap 'echo "Terminating child jobs..." | tee -a log.txt; kill -TERM $(jobs -rp) 2>/dev/null; wait; exit 143' TERM INT
 
-for file in ../../dataset/images/train/*.png; do
+for file in ../../dataset/images/*.png; do
     while [ "$(jobs -rp | wc -l)" -ge "$MAX_JOBS" ]; do
         wait -n
     done
