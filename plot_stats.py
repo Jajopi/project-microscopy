@@ -44,12 +44,19 @@ def load_stats(workflow_dir):
 def ratio(counts, labels):
     return [count / label for count, label in zip(counts, labels) if label > 0]
 
+def average(values):
+    return sum(values) / len(values) if values else 0
+
+def labeled(name, values, fmt="{:.2f}"):
+    return f"{name} (avg {fmt.format(average(values))})"
+
 def hist(ax, values, edges, color, title, xlabel):
     clipped = [min(v, edges[-1]) for v in values]
-    ax.hist(clipped, bins=edges, color=color, edgecolor="black")
+    ax.hist(clipped, bins=edges, color=color, edgecolor="black", label=labeled(xlabel, values, "{:.3f}"))
     ax.set_title(title)
     ax.set_xlabel(xlabel)
     ax.set_ylabel("Number of images")
+    ax.legend(fontsize="small")
 
 def plot_metric_histogram(single, cluster, output_dir, key, label, color, filename):
     has_clusters = cluster is not None
@@ -60,7 +67,7 @@ def plot_metric_histogram(single, cluster, output_dir, key, label, color, filena
         hist(axes[0][1], cluster[key], BINS_UNIT, color, f"Cluster {label}", label)
 
     fig.tight_layout()
-    fig.savefig(os.path.join(output_dir, filename), dpi=150)
+    fig.savefig(os.path.join(output_dir, filename), dpi=300)
     plt.close(fig)
 
 def plot_ratio_histogram(single, cluster, output_dir, count_key, bins, color, label, filename):
@@ -72,7 +79,39 @@ def plot_ratio_histogram(single, cluster, output_dir, count_key, bins, color, la
         hist(axes[0][1], ratio(cluster[count_key], cluster["labels"]), bins, color, f"Cluster {label}", label)
 
     fig.tight_layout()
-    fig.savefig(os.path.join(output_dir, filename), dpi=150)
+    fig.savefig(os.path.join(output_dir, filename), dpi=300)
+    plt.close(fig)
+
+def plot_metrics_by_sample(single, cluster, output_dir):
+    has_clusters = cluster is not None
+    fig, axes = plt.subplots(1, 2 if has_clusters else 1, figsize=(10 * (2 if has_clusters else 1), 5), squeeze=False)
+
+    def draw(ax, data, title):
+        x = range(1, len(data["TP"]) + 1)
+        counts = ax.twinx()
+
+        lines = []
+        lines += ax.plot(x, data["TP"], color="tab:green", label=labeled("TP", data["TP"], "{:.1f}"))
+        lines += ax.plot(x, data["FP"], color="tab:orange", label=labeled("FP", data["FP"], "{:.1f}"))
+        lines += ax.plot(x, data["FN"], color="tab:red", label=labeled("FN", data["FN"], "{:.1f}"))
+        lines += counts.plot(x, data["accuracy"], color="tab:blue", linestyle="--", label=labeled("Accuracy", data["accuracy"]))
+        lines += counts.plot(x, data["precision"], color="tab:purple", linestyle="--", label=labeled("Precision", data["precision"]))
+        lines += counts.plot(x, data["recall"], color="tab:brown", linestyle="--", label=labeled("Recall", data["recall"]))
+        lines += counts.plot(x, data["f1"], color="tab:pink", linestyle="--", label=labeled("F1 score", data["f1"]))
+
+        ax.set_title(title)
+        ax.set_xlabel("Sample number")
+        ax.set_ylabel("Count")
+        counts.set_ylabel("Score")
+        counts.set_ylim(0, 1)
+        ax.legend(lines, [line.get_label() for line in lines], loc="upper center",
+                  bbox_to_anchor=(0.5, -0.15), ncol=4, fontsize="small")
+
+    draw(axes[0][0], single, "Single cell metrics by sample")
+    if has_clusters:
+        draw(axes[0][1], cluster, "Cluster metrics by sample")
+
+    fig.savefig(os.path.join(output_dir, "metrics_by_sample.png"), dpi=300, bbox_inches="tight")
     plt.close(fig)
 
 if __name__ == "__main__":
@@ -86,3 +125,5 @@ if __name__ == "__main__":
 
     plot_ratio_histogram(single, cluster, workflow_dir, "FP", BINS_FP, "tab:orange", "FP / labels", "fp_ratio_histogram.png")
     plot_ratio_histogram(single, cluster, workflow_dir, "FN", BINS_UNIT, "tab:red", "FN / labels", "fn_ratio_histogram.png")
+
+    plot_metrics_by_sample(single, cluster, workflow_dir)
