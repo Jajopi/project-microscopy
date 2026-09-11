@@ -70,11 +70,11 @@ For all workflows there exist images where there are more than twice the amount 
 
 ![Fig. 6.](./plots/fn_ratio_histogram.png)
 
-> **Fig. 6. False negative detections to label count ratio histogram.** a) *clusters*, b) *simple*, c) *cellpose*
+> **Fig. 6. False negative detections to label count ratio histogram.**
 
 ![Fig. 7.](./plots/fp_ratio_histogram.png)
 
-> **Fig. 7. False positive detections to label count ratio histogram.** a) *clusters*, b) *simple*, c) *cellpose*. Some images contained a high number of false positives, ratios bigger than $2$ were put into the last bin.
+> **Fig. 7. False positive detections to label count ratio histogram.**. Some images contained a high number of false positives, ratios bigger than $2$ were put into the last bin.
 
 In some cases, usually when the real cell count was small, *cellpose* workflow failed spectacularly and detected lots of cells outside the relevant image, while also ignoring most of the real cells.  
 
@@ -90,19 +90,19 @@ Interestingly, *cellpose* scored (substantially) worse in all those single cell 
 
 ![Fig. 9.](./plots/accuracy_histogram.png)
 
-> **Fig. 9. Accuracy histogram.** a) *clusters*, b) *simple*, c) *cellpose*
+> **Fig. 9. Accuracy histogram.**
 
 ![Fig. 10.](./plots/precision_histogram.png)
 
-> **Fig. 10. Precision histogram.** a) *clusters*, b) *simple*, c) *cellpose*
+> **Fig. 10. Precision histogram.**
 
 ![Fig. 11.](./plots/recall_histogram.png)
 
-> **Fig. 11. Recall histogram.** a) *clusters*, b) *simple*, c) *cellpose*
+> **Fig. 11. Recall histogram.**
 
 ![Fig. 12.](./plots/f1_histogram.png)
 
-> **Fig. 12. F1 score histogram.** a) *clusters*, b) *simple*, c) *cellpose*
+> **Fig. 12. F1 score histogram.**
 
 ## Discussion
 
@@ -116,7 +116,7 @@ In the end, no single workflow performed well enough to be usable as tested. How
 
 In the repository [^3] associated with the original project the dataset was part of, the author claims to be able to identify almost all cells in the images with his AI-based workflow. We did not include this workflow in our comparison, but given the dataset quality, this seems to be an impressive result. If we decide to use this approach to estimate density of our cell culture, we will probably try to reuse his approach.
 
-Additionally, during this work, I used a lot of AI-based agents to perform tedious tasks, such as debugging, rewriting workflow parts which would not work otherwise, upgrading shell scripts to support parallel computation, sketching and improving plots and performing basic data analysis computations. For the latter tasks, it was not surprising that such general and basic work was performed really well. What surprised me in a positive way was the ability to understand FIJI internals and to rewrite workflows, greatly improving the work speed.
+Additionally, during this work, I used a lot of AI-based agents to perform tedious tasks, such as debugging, rewriting workflow parts which would not work otherwise, upgrading shell scripts to support parallel computation, sketching and improving plots and performing basic data analysis computations or building LaTeX template for report compilation. For the latter tasks, it was not surprising that such general and basic work was performed really well. What surprised me in a positive way was the posibility to read FIJI internals and to rewrite workflows, greatly improving the work speed.
 
 ## References and links
 
