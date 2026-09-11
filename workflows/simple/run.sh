@@ -4,7 +4,7 @@ set -ueo pipefail
 
 MAX_JOBS="${MAX_JOBS:-4}"
 IDENTIFIER="${IDENTIFIER:-simple}"
-PLOTS_DIR="${PLOTS_DIR:-plots}"
+PLOTS_DIR="${PLOTS_DIR:-overlays}"
 
 mkdir -p "$PLOTS_DIR"
 
@@ -47,3 +47,6 @@ for file in ../../dataset/images/*.png; do
     process_file "$file" &
 done
 wait
+
+{ head -1 stats.csv; tail -n +2 stats.csv | sort; } > stats.csv.sorted
+mv stats.csv.sorted stats.csv
