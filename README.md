@@ -42,14 +42,14 @@ For each workflow and each image, we compared the detected cells to dataset labe
 
 Computing matching between the detected cells and labels was done using heuristic that matched closest pairs from which both cells were not yet matched, as long as the distance between them was less that half of the average size of the cells. We implemented this in Python script `compare_results.py`. To be able to compare detected clusters, which were not in the dataset labels, we used `compare_results_clusters.py`, a similar script that also tries to group overlapping labels into clusters. The scripts also save the initial images overlayed with the resulting rectangles around the detected cells and labels, colored by the type of the (mis)match. This allowed us to visually inspect the results and see in which cases do the workflows fail and how.
 
-![Fig. 3.](./report-images/clusters-overlay-plot.png)
-> **Fig. 3. Overlay of the detected cells and labels images from Fig. 2, using *clusters* workflow.** The green rectangles mark true positive detections, orange mark false positives and red mark false negatives. Dark blue, cyan and purple rectangles represent the same outcomes for clusters.
+![Fig. 3.](./report-images/clusters-overlay.png)
+> **Fig. 3. Overlay of the detected cells and labels over Fig. 2, using *clusters* workflow.** The green rectangles mark true positive detections, orange mark false positives and red mark false negatives. Dark blue, cyan and purple rectangles represent the same outcomes for clusters.
 
 table with link to workflow files
 | Workflow | Preprocessing | Analysis |
 |----------|---------------|----------|
-| Simple   | [grayscale, background removal, gaussian blur, thresholding, watershed](./workflows/simple/Preprocess.ijm)   | [Analyze Particles](./workflows/simple/Analyze.ijm)   |
 | Clusters | [grayscale, background removal, gaussian blur, thresholding](./workflows/clusters/Preprocess.ijm) | [Analyze Particles, separately small and big](./workflows/clusters/Analyze.ijm) |
+| Simple   | [grayscale, background removal, gaussian blur, thresholding, watershed](./workflows/simple/Preprocess.ijm)   | [Analyze Particles](./workflows/simple/Analyze.ijm)   |
 | Cellpose | [grayscale, background removal, gaussian blur](./workflows/cellpose/Preprocess.ijm) | [Cellpose plugin with pretrained model](./workflows/cellpose/Analyze.ijm) |
 
 ## Results
@@ -71,6 +71,17 @@ table with link to workflow files
 
 ![Fig. 9.](./plots/f1_histogram.png)
 > **Fig. 9. F1 score histogram.** a) *clusters*, b) *simple*, c) *cellpose*
+
+...
+
+![Fig. 10.](./report-images/simple-overlay.png)
+> **Fig. 10. Overlay of the detected cells and labels over Fig. 2, using *simple* workflow.** The green rectangles mark true positive detections, orange mark false positives and red mark false negatives.
+
+![Fig. 11.](./report-images/cellpose-overlay.png)
+> **Fig. 11. Overlay of the detected cells and labels over Fig. 2, using *cellpose* workflow.** The green rectangles mark true positive detections, orange mark false positives and red mark false negatives.
+
+![Fig. 12.](./report-images/overlay-cellpose-failing.png)
+> **Fig. 12. Overlay of the detected cells and labels using *cellpose* workflow, failing and generating lot of false positive results.** The green rectangles mark true positive detections, orange mark false positives and red mark false negatives.
 
 ## Discussion
 
