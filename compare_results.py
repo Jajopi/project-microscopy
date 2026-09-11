@@ -15,10 +15,14 @@ def get_image_size(image_file):
 def load_data(result_file, label_file, image_size):
     results = []
     with open(result_file, 'r') as f:
-        for raw_res in f.readlines()[1:]:
+        lines = f.readlines()
+        header = lines[0].strip().split(',')
+        x_idx, y_idx = header.index('X'), header.index('Y')
+        w_idx, h_idx = header.index('Width'), header.index('Height')
+        for raw_res in lines[1:]:
             vals = raw_res.strip().split(',')
-            x, y = float(vals[-7]) / image_size[0], float(vals[-6]) / image_size[1]
-            w, h = float(vals[-2]) / image_size[0], float(vals[-1]) / image_size[1]
+            x, y = float(vals[x_idx]) / image_size[0], float(vals[y_idx]) / image_size[1]
+            w, h = float(vals[w_idx]) / image_size[0], float(vals[h_idx]) / image_size[1]
             results.append((x, y, w, h))
     labels = []
     with open(label_file, 'r') as f:
